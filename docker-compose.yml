@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+    
+    db:
+        image: mysql:8.0.20
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - "db_app:/var/lib/mysql"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - 3308:3308
+        networks:
+            - currency_exchange
+    php:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - ./currency_exchange/:/var/www/currency_exchange/
+        networks:
+            - currency_exchange
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        ports:
+            - 80:80
+        volumes:
+            - ./currency_exchange/:/var/www/currency_exchange/
+        networks:
+            - currency_exchange
+volumes:
+    db_app:
+
+networks:
+    currency_exchange:
