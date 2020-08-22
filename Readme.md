@@ -8,7 +8,7 @@
 
 1. Clone this rep.
 
-2. Run `docker-compose build`
+2. Inside folder `kuznetsova-docker` run `docker-compose build`
 
 3. Run `docker-compose up -d`
 
